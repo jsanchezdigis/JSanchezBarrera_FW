@@ -1,0 +1,57 @@
+﻿@model ML.Profesor
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Profesor</h2>
+    </div>
+    <hr />
+    <div class="row">
+        <div style="float:right">
+            @Html.ActionLink("Agregar Profesor", "Form", "Profesor", htmlAttributes: new { @class = "btn btn-success" })
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model.Profesores != null)
+        {
+            //tabla
+            <table class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <td class="text-center" style=" font-weight:bold;">Editar</td>
+
+                        <td class="hidden">IdProfesor</td>
+                        <td class="text-center" style=" font-weight:bold;">Nombre</td>
+
+                        <td class="text-center" style=" font-weight:bold;">Eliminar</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (ML.Profesor profesor in Model.Profesores)
+                    {
+                        <tr>
+                            <td class="text-center"><a class="btn btn-warning glyphicon glyphicon-edit" href="@Url.Action("Form", "Profesor", new { IdProfesor = profesor.IdProfesor})"></a></td>
+
+                            <td class="hidden">@profesor.IdProfesor</td>
+                            <td class="text-center">@profesor.Nombre @profesor.ApellidoPaterno </td>
+
+                            <td class="text-center"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Profesor", new { IdProfesor = profesor.IdProfesor })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">Ocurrio un error al realizar la consulta </div>
+        }
+    </div>
+</div>
+

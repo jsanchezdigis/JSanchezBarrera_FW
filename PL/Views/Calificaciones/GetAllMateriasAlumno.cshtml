@@ -1,0 +1,142 @@
+﻿@model ML.Calificaciones
+@{
+    ViewBag.Title = "GetAllMateriasAlumno";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Calificaciones</h2>
+    </div>
+    <div>
+        <h1>
+            @Html.ActionLink(Model.Alumno.Nombre + " " + Model.Alumno.ApellidoPaterno + " " + Model.Alumno.ApellidoMaterno, "GetAllMateriasAlumno", "Calificaciones", new { IdAlumno = Model.Alumno.IdAlumno }, null)
+        </h1>
+        @*<h1>@Model.Alumno.Nombre @Model.Alumno.ApellidoPaterno @Model.Alumno.ApellidoMaterno</h1>*@
+    </div>
+    <!--<div class="row">
+        <div style="float:right">-->
+            @*@Html.ActionLink("Agregar Calificacion", "ver que poner", "Calificaciones", htmlAttributes: new { @class = "btn btn-success" })*@
+            <!--<a><input type="submit" value="Agregar" class="btn btn-success col-md-12" id="AddCalificacion" /></a>
+        </div>
+    </div>-->
+
+    <div class="container" id="input" @*style="display:none;"*@>
+
+        <div class="row">
+            <div class="col-md-12">
+                @using (Html.BeginForm("Add", "Calificaciones", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.IdCalificaciones, new { @class = "hidden" })
+                                @Html.TextBoxFor(model => model.IdCalificaciones, new { @class = "hidden form-control", @id = "txtEmpleadoID" })
+                                @Html.ValidationMessageFor(model => model.IdCalificaciones)
+                                @*hidden*@
+                            </div>
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.Alumno.IdAlumno, new { @class = "hidden" })
+                                @Html.TextBoxFor(model => model.Alumno.IdAlumno, new { @class = "hidden form-control", @id = "txtEmpleadoID" })
+                                @Html.ValidationMessageFor(model => model.Alumno.IdAlumno)
+                                @*hidden*@
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.Calificacion)
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa-solid fa-signature" style="color:darkcyan"></i></span>
+                                    @Html.TextBoxFor(model => model.Calificacion, new { @class = "form-control", @id = "txtNombre" })
+
+                                    @Html.ValidationMessageFor(model => model.Calificacion)
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.Materia)
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa-solid fa-address-book" style="color:darkcyan"></i></span>
+                                    @Html.DropDownListFor(model => model.Materia.IdMateria, new SelectList(Model.Materia.Materias, "IdMateria", "Nombre"), "Materias", new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                @Html.LabelFor(model => model.Profesor)
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa-solid fa-address-book" style="color:darkcyan"></i></span>
+                                    @Html.DropDownListFor(model => model.Profesor.IdProfesor, new SelectList(Model.Profesor.Profesores, "IdProfesor", "Nombre"), "Profesores", new { @class = "form-control" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1"><i class="fa-solid fa-bookmark" style="color:green"></i></span>
+                                    <input type="submit" value="Guardar" class="btn btn-success" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model.Calificaciones1 != null)
+        {
+            //tabla
+            <table class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <td class="text-center" style=" font-weight:bold;">Editar</td>
+
+                        <td class="hidden">IdCalificaiones</td>
+                        <td class="text-center" style=" font-weight:bold;">Materia</td>
+                        <td class="text-center" style=" font-weight:bold;">Calificación</td>
+
+                        <td class="text-center" style=" font-weight:bold;">Eliminar</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (ML.Calificaciones calificaciones in Model.Calificaciones1)
+                    {
+                        <tr>
+                            <td class="text-center"><a class="btn btn-warning glyphicon glyphicon-edit" href="@Url.Action("Add", "Calificaciones", new { IdCalificaciones = calificaciones.IdCalificaciones })"></a></td>
+
+                            <td class="hidden">@calificaciones.IdCalificaciones</td>
+                            <td class="text-center">@calificaciones.Materia.Nombre</td>
+                            <td class="text-center">@calificaciones.Calificacion</td>
+
+                            <td class="text-center"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Calificaciones", new { IdCalificaciones = calificaciones.IdCalificaciones })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">Ocurrio un error al realizar la consulta </div>
+        }
+    </div>
+
+</div>
+
+@*@Scripts.Render("~/bundles/jquery")
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script type="text/javascript">
+    $('#AddCalificacion').click(function () {
+        $('#input').toggle('slow', function () {
+        });
+    });
+</script>*@
